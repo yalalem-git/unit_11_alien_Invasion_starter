@@ -1,7 +1,7 @@
 import sys
 import pygame
 from settings import Settings
-
+from ship import Ship
 class ALienInvassion:
     def __init__(self):
         pygame.init()
@@ -15,17 +15,29 @@ class ALienInvassion:
 
         self.running = True
         self.clock = pygame.time.Clock()
+
+        self.ship = Ship(self)
     
     def run_game (self):
         while self.running:
+            self._check_events()
+
+            self._update_screen()
+            self.clock.tick(self.settings.FPS)
+
+    def _update_screen(self):
+        self.screen.blit(self.bg, (0,0))
+        self.ship.draw()
+        pygame.display.flip()
+
+    
+    def _check_events(self):
             for event in pygame.event.get():
-                if event == pygame.QUIT:
+                if event.type == pygame.QUIT:
                    self.running = False
                    pygame.quit()
                    sys.exit()
-                   self.screen.blit(self.bg, (0,0))
-            pygame.display.flip()
-            self.clock.tick(self.settings.FPS)
+            
 
 if __name__ == "__main__":
     """Test comment""" 
