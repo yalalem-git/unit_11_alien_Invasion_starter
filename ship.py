@@ -15,10 +15,7 @@ class Ship:
 
             self.image = pygame.image.load(self.settings.ship_file)
 
-            self.firing = False                 # Flag to track if firing key is held
-            self.fire_cooldown = 300           # milliseconds between shots (adjust as needed)
-            self.last_fire_time = 0            # Time when the last bullet was fired
-
+           
 # Resize first
             self.image = pygame.transform.scale(
             self.image, (self.settings.ship_w, self.settings.ship_h)
@@ -56,7 +53,7 @@ class Ship:
           temp_speed = self.settings.ship_speed
           if self.moving_up and self.rect.top > self.boundaries.top:
                 self.y -= temp_speed
-          if self.moving_down and self.rect.bottom > self.boundaries.left:
+          if self.moving_down and self.rect.bottom < self.boundaries.bottom:
                 self.y += temp_speed 
           self.rect.y = self.y
 
