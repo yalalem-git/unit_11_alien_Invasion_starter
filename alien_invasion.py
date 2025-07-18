@@ -74,7 +74,7 @@ class AlienInvasion:
                 #play the laser sound
                 self.laser_sound.play()
                 self.laser_sound.fadeout(250)
- 
+
         elif event.key == pygame.K_q:
             self.running = False
             pygame.quit()
