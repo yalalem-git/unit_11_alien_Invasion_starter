@@ -43,6 +43,8 @@ class Ship:
             self.moving_down = False
             self.y = float(self.rect.y)
             self.arsenal = arsenal
+# Rotate 90° to face center (right if on left side, left if on right side)
+          
       def update (self):
             # updating position of the ship
           self._update_ship_movement()
