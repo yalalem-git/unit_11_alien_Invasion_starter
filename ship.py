@@ -14,29 +14,51 @@ class Ship:
             self.boundaries = self.screen.get_rect()
 
             self.image = pygame.image.load(self.settings.ship_file)
-            self.image = pygame.transform.scale(self.image, 
-                              (self.settings.ship_w, self.settings.ship_h)
-                              )
 
+            self.firing = False                 # Flag to track if firing key is held
+            self.fire_cooldown = 300           # milliseconds between shots (adjust as needed)
+            self.last_fire_time = 0            # Time when the last bullet was fired
+
+# Resize first
+            self.image = pygame.transform.scale(
+            self.image, (self.settings.ship_w, self.settings.ship_h)
+        )
+
+# Rotate 90° to face center (right if on left side, left if on right side)
+            if self.settings.ship_side == "left":
+                self.image = pygame.transform.rotate(self.image, -90)  # Face right
+            else:
+               self.image = pygame.transform.rotate(self.image, 90)   # Face left    
+           
+            self.side = game.settings.ship_side  # ← used to determine left or right side
             self.rect = self.image.get_rect()
-            self.rect.midbottom = self.boundaries.midbottom
-            self.moving_right = False
-            self.moving_left = False
-            self.x = float(self.rect.x)
-            self.arsenal = arsenal
 
+        # Position the ship based on side
+            if self.side == "left":
+                self.rect.left = 0
+            else:
+                self.rect.right = self.boundaries.right
+                self.image = pygame.transform.flip(self.image, True, False)  # face center
+
+            self.rect.centery = self.boundaries.centery
+
+            self.moving_up = False
+            self.moving_down = False
+            self.y = float(self.rect.y)
+            self.arsenal = arsenal
       def update (self):
             # updating position of the ship
           self._update_ship_movement()
           self.arsenal.update_arsenal()
 
+
       def _update_ship_movement(self):
           temp_speed = self.settings.ship_speed
-          if self.moving_right and self.rect.right < self.boundaries.right:
-                self.x += temp_speed
-          if self.moving_left and self.rect.left > self.boundaries.left:
-                self.x += temp_speed
-          self.rect.x = self.x
+          if self.moving_up and self.rect.top > self.boundaries.top:
+                self.y -= temp_speed
+          if self.moving_down and self.rect.bottom > self.boundaries.left:
+                self.y += temp_speed 
+          self.rect.y = self.y
 
       def draw(self)-> None:
             self.arsenal.draw()

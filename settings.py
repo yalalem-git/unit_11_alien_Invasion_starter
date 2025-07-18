@@ -17,4 +17,5 @@ class Settings:
         self.bullet_speed = 7
         self.bullet_w = 25
         self. bullet_h = 80
-        self.bullet_amount = 5
+        self.bullet_amount = 100        
+        self.ship_side = "left"
