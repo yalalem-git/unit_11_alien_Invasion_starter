@@ -2,10 +2,16 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
-class ALienInvassion:
-    def __init__(self):
+from arsenal import Arsenal
+
+
+class AlienInvasion:
+
+    def __init__(self)-> None:
+
         pygame.init()
         self.settings = Settings()
+
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption(self.settings.name)
 
@@ -15,19 +21,24 @@ class ALienInvassion:
 
         self.running = True
         self.clock = pygame.time.Clock()
+    
 
-        self.ship = Ship(self)
+        pygame.mixer.init()
+        self.laser_sound = pygame.mixer.Sound(str(self.settings.laser_sound))
+        self.laser_sound.set_volume(0.7)
+               
+        self.ship = Ship(self, Arsenal(self))
+
     
     def run_game (self):
         while self.running:
             self._check_events()
 
-            self.ship
-
+            self.ship.update()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
-    def _update_screen(self):
+    def _update_screen(self)->None:
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         pygame.display.flip()
@@ -45,7 +56,7 @@ class ALienInvassion:
                 elif event.type == pygame.KEYUP:
                     self._check_keydown_events(event)
 
-    def _check_keyup_events(self, event):
+    def _check_keyup_events(self, event)->None:
        if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
        elif event.key == pygame.K_LEFT:
@@ -53,16 +64,23 @@ class ALienInvassion:
         
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = True
-        elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = True
+            self.ship.moving_right = False
 
-        elif event.key == pygame.K_Q:
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
+
+        elif event.key == pygame.K_SPACE:
+            if self.ship.fire():
+                #play the laser sound
+                self.laser_sound.play()
+
+        elif event.key == pygame.K_q:
             self.running = False
             pygame.quit()
             sys.exit()
 
 if __name__ == "__main__":
     """Test comment""" 
-    ai = ALienInvassion()
+    ai = AlienInvasion()
     ai.run_game()
+  
