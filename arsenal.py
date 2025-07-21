@@ -1,6 +1,6 @@
 
 import pygame
-from bullet import Bullets
+from alien import Alien
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
