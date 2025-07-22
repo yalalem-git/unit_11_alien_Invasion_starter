@@ -103,7 +103,10 @@ class AlienFleet:
             for col in range(aliens_per_row):
                 current_x = screen_w - ((col + 1) * 2 * alien_w)
                 current_y = alien_h + row * 2 * alien_h
+                if row % 2 != 0:
+                    continue
                 self._create_alien(current_x, current_y)
+
 
     def _create_alien(self, current_x: int, current_y: int) -> None:
         alien = Alien(self, current_x, current_y)
