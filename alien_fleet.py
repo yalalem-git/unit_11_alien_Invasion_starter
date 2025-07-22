@@ -40,10 +40,12 @@ class AlienFleet:
             y = alien_h + 2 * alien_h * row
             self._create_alien(x, y)'''
       for col in range(fleet_w):
-         current_x = screen_w - (alien_w + 2 * alien_w * col) #screen_w - (alien_w + 2 * alien_w * col)
+         current_x = screen_w - (alien_w + 2 * alien_w * col) 
          for row in range(fleet_h):
-            current_y = screen_h - (alien_h + 2 * alien_h * row) 
+            current_y = int(y_offset + 2 * alien_h * row)  #screen_h - (alien_h + 2 * alien_h * row)  # making aliens center
+           
             self._create_alien(current_x, current_y)
+      
 
    def calculate_fleet_size(self, alien_h, screen_h):
        fleet_h = (screen_h//alien_h)
