@@ -86,18 +86,21 @@ class Alien(Sprite):
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+       
     def update(self) -> None:
-        if self.check_edges():
-            self.settings.fleet_direction *= -1
-            self.x -= self.settings.fleet_drop_speed
+        # Move leftward constantly
+        self.x -= self.settings.fleet_speed
+        self.rect.x = int(self.x)
 
-        self.y += self.settings.fleet_speed * self.settings.fleet_direction
-        self.rect.x = self.x
+         # Move vertically, bouncing at top/bottom
+        self.y += self.settings.vertical_direction * self.settings.fleet_speed
         self.rect.y = int(self.y)
 
     def check_edges(self) -> bool:
-        return (self.rect.top <= self.boundaries.top or 
-                self.rect.bottom >= self.boundaries.bottom)
+        return (
+               self.rect.top <= self.boundaries.top or 
+               self.rect.bottom >= self.boundaries.bottom
+    )
 
     def draw_alien(self) -> None:
         self.screen.blit(self.image, self.rect)

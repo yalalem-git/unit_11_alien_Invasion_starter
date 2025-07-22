@@ -54,7 +54,7 @@ class AlienInvasion:
             self._check_events()
 
             self.ship.update()
-            #self.alien.update()
+            self.alien_fleet.update_fleet()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 

@@ -67,7 +67,7 @@ class AlienFleet:
       alien: 'Alien'
       for alien in self.fleet:
          alien.draw_alien()'''
-import pygame
+'''import pygame
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
    from alien_invasion import AlienInvasion
@@ -91,21 +91,41 @@ class AlienFleet:
         screen_w = self.settings.screen_width
         screen_h = self.settings.screen_height
 
-        # Half of screen reserved for fleet
-        fleet_area_w = screen_w // 2
-        fleet_area_h = screen_h
+        fleet_w, fleet_h = self.calculate_fleet_size(alien_w, screen_w, alien_h, screen_h)
+        x_offset, y_offset = self.calculate_offsets(alien_w, alien_h, screen_w, fleet_w, fleet_h)
+        self._create_rectangle_fleet (alien_w, alien_h, fleet_w , fleet_h, x_offset, y_offset)
+    
+    def _create_rectangle_fleet(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset) -> None:
 
-        # Calculate horizontal and vertical capacity
-        aliens_per_row = fleet_area_w // (2 * alien_w)
-        rows = fleet_area_h // (2 * alien_h)
-
-        for row in range(rows):
-            for col in range(aliens_per_row):
-                current_x = screen_w - ((col + 1) * 2 * alien_w)
-                current_y = alien_h + row * 2 * alien_h
-                if row % 2 != 0:
+        for row in range(fleet_w):
+            for col in range(fleet_h):
+                current_x = alien_w * col + x_offset
+                current_y = alien_h * row + y_offset  
+                if row % 2 != 0 or col % 2 != 0:
                     continue
                 self._create_alien(current_x, current_y)
+
+    def calculate_offsets(self, alien_w, alien_h, screen_w, fleet_w, fleet_h) -> tuple[int, int]:
+          half_screen = self.settings.screen_width//2
+          fleet_horizontal_space = fleet_h * alien_h
+          fleet_vertical_space = fleet_w * alien_w
+          x_offset = int ((screen_w - fleet_horizontal_space)//2)
+          y_offset = int ((half_screen - fleet_vertical_space)//2)
+          return x_offset, y_offset
+    
+    def calculate_fleet_size (self, alien_w, screen_w, alien_h, screen_h)-> tuple[int, int]:
+        fleet_w = ((screen_h/2)//alien_h)
+        fleet_h = (screen_w//alien_w)
+
+        if fleet_w % 2 != 0:
+            fleet_w -= 1
+        else:
+            fleet_w -= 2
+        if fleet_h % 2 != 0 :
+            fleet_h -= 1
+        else:
+            fleet_h -= 2
+        return int(fleet_w), int(fleet_h)
 
 
     def _create_alien(self, current_x: int, current_y: int) -> None:
@@ -114,4 +134,305 @@ class AlienFleet:
 
     def draw(self) -> None:
         for alien in self.fleet:
-            alien.draw_alien()
+            alien.draw_alien()'''
+'''
+import pygame
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+   from alien_invasion import AlienInvasion
+from alien import Alien
+class AlienFleet:
+   
+   def __init__(self, game: "AlienInvasion")-> None:
+      self.game = game
+      self.settings = game.settings
+      self.fleet = pygame.sprite.Group()
+      self.fleet_direction = self.settings.fleet_direction
+      self.drop_speed = self.settings.fleet_speed
+
+      self.create_fleet()
+
+   def create_fleet(self)-> None:
+      alien_w = self.settings.alien_w
+      alien_h = self.settings.alien_h
+      screen_h = self.settings.screen_height
+      screen_w = self.settings.screen_width
+
+      fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, alien_w, screen_w)
+      
+      half_screen = self.settings.screen_width//2
+
+      fleet_vertical_space = fleet_h * alien_h
+      fleet_horizontal_space = fleet_w * alien_w
+
+      y_offset = (screen_h - fleet_vertical_space) // 2
+      x_offset = (half_screen - fleet_horizontal_space)//2
+
+
+      for row in range(fleet_h):
+         # = screen_w - (alien_w + 2 * alien_w * col) 
+         for col in range(fleet_w):
+            current_y = alien_h  * row + y_offset
+           # current_x  = alien_w * col  + x_offset
+            current_x = self.settings.screen_width - alien_w - (alien_w * 2 * col) - x_offset # my addition
+         
+            #int(y_offset + 2 * alien_h * row)  #screen_h - (alien_h + 2 * alien_h * row)  # making aliens center
+           
+            self._create_alien(current_x, current_y)
+
+
+   def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
+       fleet_h = (screen_h//  alien_h)
+       fleet_w = (screen_w//alien_w)
+
+       if fleet_h  % 2 == 0:
+           fleet_h -= 1
+       else:
+          fleet_h -= 2
+       if fleet_w % 2 == 0:
+          fleet_w -= 1
+       else:
+          fleet_w -= 2
+
+       return int(fleet_h), int(fleet_w)
+   
+   def _create_alien(self, current_x: int, current_y:int)-> None:
+      new_alien = Alien(self, current_x, current_y)
+
+      self.fleet.add(new_alien)
+
+   def draw(self) ->None:
+      alien: 'Alien'
+      for alien in self.fleet:
+         alien.draw_alien()'''
+
+'''import pygame
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+   from alien_invasion import AlienInvasion
+from alien import Alien
+class AlienFleet:
+   
+   def __init__(self, game: "AlienInvasion")-> None:
+      self.game = game
+      self.settings = game.settings
+      self.fleet = pygame.sprite.Group()
+      self.fleet_direction = self.settings.fleet_direction
+      self.drop_speed = self.settings.fleet_speed
+
+      self.create_fleet()
+
+   def create_fleet(self)-> None:
+      alien_w = self.settings.alien_w
+      alien_h = self.settings.alien_h
+      screen_h = self.settings.screen_height
+      screen_w = self.settings.screen_width
+
+      fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, alien_w, screen_w)
+      
+      half_screen = self.settings.screen_width//2
+
+      fleet_vertical_space = fleet_h * alien_h
+      fleet_horizontal_space = fleet_w * alien_w
+
+      y_offset = (screen_h - fleet_vertical_space) // 2
+      x_offset = (half_screen - fleet_horizontal_space)//2
+
+
+      for row in range(fleet_h):
+         # = screen_w - (alien_w + 2 * alien_w * col) 
+         for col in range(fleet_w):
+            current_y = alien_h  * row + y_offset
+           # current_x  = alien_w * col  + x_offset
+            current_x = self.settings.screen_width - alien_w - (alien_w * 2 * col) - x_offset # my addition
+         
+            #int(y_offset + 2 * alien_h * row)  #screen_h - (alien_h + 2 * alien_h * row)  # making aliens center
+           
+            self._create_alien(current_x, current_y)
+
+
+   def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
+       fleet_h = (screen_h//  alien_h)
+       fleet_w = (screen_w//alien_w)
+
+       if fleet_h  % 2 == 0:
+           fleet_h -= 1
+       else:
+          fleet_h -= 2
+       if fleet_w % 2 == 0:
+          fleet_w -= 1
+       else:
+          fleet_w -= 2
+
+       return int(fleet_h), int(fleet_w)
+   
+   def _create_alien(self, current_x: int, current_y:int)-> None:
+      new_alien = Alien(self, current_x, current_y)
+
+      self.fleet.add(new_alien)
+
+   def draw(self) ->None:
+      alien: 'Alien'
+      for alien in self.fleet:
+         alien.draw_alien()'''
+
+'''import pygame
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+   from alien_invasion import AlienInvasion
+from alien import Alien
+class AlienFleet:
+   
+   def __init__(self, game: "AlienInvasion")-> None:
+      self.game = game
+      self.settings = game.settings
+      self.fleet = pygame.sprite.Group()
+      self.fleet_direction = self.settings.fleet_direction
+      self.drop_speed = self.settings.fleet_speed
+
+      self.create_fleet()
+
+   def create_fleet(self)-> None:
+      alien_w = self.settings.alien_w
+      alien_h = self.settings.alien_h
+      screen_h = self.settings.screen_height
+      screen_w = self.settings.screen_width
+
+      fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, alien_w, screen_w)
+      
+      half_screen = self.settings.screen_width//2
+
+      fleet_vertical_space = fleet_h * alien_h
+      fleet_horizontal_space = fleet_w * alien_w
+
+      y_offset = (screen_h - fleet_vertical_space) // 2
+      x_offset = (half_screen - fleet_horizontal_space)//2
+
+
+      for row in range(fleet_h):
+         # = screen_w - (alien_w + 2 * alien_w * col) 
+         for col in range(fleet_w):
+            current_y = alien_h  * row + y_offset
+           # current_x  = alien_w * col  + x_offset
+            current_x = self.settings.screen_width - alien_w - (alien_w * 2 * col) - x_offset # my addition
+         
+            #int(y_offset + 2 * alien_h * row)  #screen_h - (alien_h + 2 * alien_h * row)  # making aliens center
+           
+            self._create_alien(current_x, current_y)
+
+
+   def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
+       fleet_h = (screen_h//  alien_h)
+       fleet_w = (screen_w//alien_w)
+
+       if fleet_h  % 2 == 0:
+           fleet_h -= 1
+       else:
+          fleet_h -= 2
+       if fleet_w % 2 == 0:
+          fleet_w -= 1
+       else:
+          fleet_w -= 2
+
+       return int(fleet_h), int(fleet_w)
+   
+   def _create_alien(self, current_x: int, current_y:int)-> None:
+      new_alien = Alien(self, current_x, current_y)
+
+      self.fleet.add(new_alien)
+
+   def draw(self) ->None:
+      alien: 'Alien'
+      for alien in self.fleet:
+         alien.draw_alien()
+         '''
+
+import pygame
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+   from alien_invasion import AlienInvasion
+from alien import Alien
+class AlienFleet:
+   
+   def __init__(self, game: "AlienInvasion")-> None:
+      self.game = game
+      self.settings = game.settings
+      self.fleet = pygame.sprite.Group()
+      self.fleet_direction = self.settings.fleet_direction
+      self.drop_speed = self.settings.fleet_speed
+
+      self.create_fleet()
+
+   def create_fleet(self)-> None:
+      alien_w = self.settings.alien_w
+      alien_h = self.settings.alien_h
+      screen_h = self.settings.screen_height
+      screen_w = self.settings.screen_width
+
+      fleet_h, fleet_w = self.calculate_fleet_size(alien_h, screen_h, alien_w, screen_w)
+      
+      half_screen = self.settings.screen_width // 2
+      alien_spacing = 2 *  alien_w  # Add 10% alien width for spacing
+
+      fleet_vertical_space = fleet_h * alien_h 
+      fleet_horizontal_space = fleet_w * alien_spacing
+
+      x_offset, y_offset = self.calculate_offset(half_screen, fleet_horizontal_space, fleet_vertical_space, screen_h)
+
+      for row in range(fleet_h):
+         for col in range(fleet_w):
+            current_y = alien_h * row + y_offset
+            current_x = half_screen + (alien_spacing * col) + x_offset  # Start from right half with spacing
+         
+            self._create_alien(current_x, current_y)
+
+   def calculate_fleet_size(self, alien_h, screen_h, alien_w, screen_w):
+       fleet_h = (screen_h // alien_h)
+       fleet_w = (screen_w // (alien_w * 1.5))  # Adjust for spacing in fleet width
+
+       if fleet_h % 2 == 0:
+           fleet_h -= 1
+       else:
+          fleet_h -= 2
+       if fleet_w % 2 == 0:
+          fleet_w -= 1
+       else:
+          fleet_w -= 2
+
+       return int(fleet_h), int(fleet_w)
+
+   def calculate_offset(self, half_screen, fleet_horizontal_space, fleet_vertical_space, screen_h):
+       x_offset = (half_screen // 2 - fleet_horizontal_space // 2)  # Center in right half
+       y_offset = (screen_h - fleet_vertical_space) // 2
+       return x_offset, y_offset
+   
+   def _create_alien(self, current_x: int, current_y:int)-> None:
+      new_alien = Alien(self, current_x, current_y)
+
+      self.fleet.add(new_alien)
+
+   def _check_fleet_edges(self):
+        for alien in self.fleet:
+            if alien.check_edges():
+                self._drop_alien_fleet()
+                self.settings.vertical_direction *= -1  # Bounce
+                for alien in self.fleet:
+                    alien.x -= self.settings.fleet_speed  # Move left by 1 step
+                    alien.rect.x = int(alien.x)
+                break
+         
+          
+            
+   def _drop_alien_fleet(self)-> None:
+      for alien in self.fleet:
+         alien.x -= self.settings.fleet_drop_speed
+
+       
+   def update_fleet(self)-> None:
+      self._check_fleet_edges()
+      self.fleet.update()
+
+   def draw(self) ->None:
+      alien: 'Alien'
+      for alien in self.fleet:
+         alien.draw_alien()
