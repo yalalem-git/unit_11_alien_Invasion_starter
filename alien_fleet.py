@@ -20,30 +20,40 @@ class AlienFleet:
       screen_h = self.settings.screen_height
       screen_w = self.settings.screen_width
 
-      fleet_w = self.calculate_fleet_size(alien_w, screen_h)
+      fleet_h = self.calculate_fleet_size(alien_h, screen_h)
+      fleet_w = self.calculate_fleet_size(alien_w, screen_w)
+      
 
-      fleet_vertical_space = fleet_w * alien_w
+      fleet_vertical_space = fleet_h * alien_h
+      fleet_horizontal_space = fleet_w * alien_w
+
       y_offset = int((screen_h - fleet_vertical_space) // 2)
+      x_offset = int((screen_w- fleet_horizontal_space)// 2)
 
 # some modifications to the fleet creat vertical screen fit
-      cols = screen_w // (2 * alien_w )
+      '''cols = screen_w // (2 * alien_w )
       rows = screen_h // (2 * alien_h)
 
       for row in range(rows):
          for col in range(cols):
             x = alien_w + 2 * alien_w * col 
             y = alien_h + 2 * alien_h * row
-            self._create_alien(x, y)
+            self._create_alien(x, y)'''
+      for col in range(fleet_w):
+         current_x = screen_w - (alien_w + 2 * alien_w * col) #screen_w - (alien_w + 2 * alien_w * col)
+         for row in range(fleet_h):
+            current_y = screen_h - (alien_h + 2 * alien_h * row) 
+            self._create_alien(current_x, current_y)
 
-   def calculate_fleet_size(self, alien_w, screen_h):
-       fleet_w = (screen_h//alien_w)
+   def calculate_fleet_size(self, alien_h, screen_h):
+       fleet_h = (screen_h//alien_h)
 
-       if fleet_w  % 2 == 0:
-           fleet_w -= 1
+       if fleet_h  % 2 == 0:
+           fleet_h -= 1
        else:
-          fleet_w -= 2
+          fleet_h -= 2
 
-       return fleet_w
+       return fleet_h
    
    def _create_alien(self, current_x: int, current_y:int):
       new_alien = Alien(self, current_x, current_y)
