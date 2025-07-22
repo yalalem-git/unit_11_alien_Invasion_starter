@@ -17,5 +17,17 @@ class Settings:
         self.bullet_speed = 7
         self.bullet_w = 25
         self. bullet_h = 80
-        self.bullet_amount = 100        
+        self.bullet_amount = 5        
         self.ship_side = "left"
+        
+        self.alien_file = base_dir / 'Assets' / 'images' / 'alienenemy_4.png'
+        self.alien_w = 40
+        self.alien_h = 40
+        self.fleet_speed = 5
+
+        self.alien_file = base_dir / 'Assets' / 'images' / 'enemy_4.png'
+        self.alien_w = 40
+        self.alien_h = 40
+        self.fleet_speed = 2
+
+

@@ -3,6 +3,7 @@ import pygame
 from alien import Alien
 
 from typing import TYPE_CHECKING
+from bullet import Bullets
 if TYPE_CHECKING:
       from alien_invasion import AlienInvasion
 
