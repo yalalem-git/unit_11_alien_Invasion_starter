@@ -19,11 +19,10 @@ class Alien(Sprite):
                               (self.settings.alien_w, self.settings.alien_h)
                               )
 
-            self.image = pygame.transform.flip(self.image, True, False) 
+            #self.image = pygame.transform.flip(self.image, True, False) 
             self.rect = self.image.get_rect()
-            
-           # self.rect.x = x  # Positioning based on the screen
-            #self.rect.y = y 
+            self.rect.x = x  # Positioning based on the screen
+            self.rect.y = y 
             # Positioining the alien from the right vertical axis
             self.rect.x = self.boundaries.right - self.rect.width
 
@@ -35,12 +34,15 @@ class Alien(Sprite):
       
       def update(self) -> None:
           temp_speed = self.settings.fleet_speed
+
           if self.check_edges():
                 self.settings.fleet_direction *= -1
+                self.x -= self.settings.fleet_drop_speed
 
         
           self.y += temp_speed  * self.settings.fleet_direction
-          self.rect.y = self.y
+          self.rect.x = self.x
+          self.rect.y = int(self.y) # update y position for vertical movement
 
 
       def check_edges (self) -> bool:
