@@ -1,27 +1,15 @@
-"""
-Alien Invasion
-
-This game is a modified version of the classic Alien Invasion project, built using Pygame.
-I have edited the game code from the classroom videos just to make the fire horizontal.
-
-Author: Yalalem Tegenie
-
-17 July 2025
-"""
-
 
 import sys
 import pygame
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
-from alien import Alien
+from alien import Alien 
 from alien_fleet import AlienFleet
 
 class AlienInvasion:
 
     def __init__(self)-> None:
-
         pygame.init()
         self.settings = Settings()
 
@@ -31,79 +19,104 @@ class AlienInvasion:
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(self.bg, 
                 (self.settings.screen_width, self.settings.screen_height))
-
+  
         self.running = True
         self.clock = pygame.time.Clock()
-    
 
         pygame.mixer.init()
-        self.laser_sound = pygame.mixer.Sound(str(self.settings.laser_sound))
+        self.laser_sound = pygame.mixer.Sound(str(self.settings.impact_sound))
         self.laser_sound.set_volume(0.7)
+
+        self.impact_sound = pygame.mixer.Sound(str(self.settings.impact_sound))
+        self.impact_sound.set_volume(0.7)
                
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
-          # EDIT 1: Position ship on left border, centered vertically
+
+        # Position ship on left border, centered vertically
         self.ship.rect.x = 0
         self.ship.rect.y = self.settings.screen_height // 2
 
-
-    
-    def run_game (self):
+    def run_game(self):
         while self.running:
             self._check_events()
-
             self.ship.update()
             self.alien_fleet.update_fleet()
+            self._check_collisions()
             self._update_screen()
+
             self.clock.tick(self.settings.FPS)
+
+    def _check_collisions(self)-> None:
+        #if pygame.sprite.spritecollideany(self.ship, self.alien_fleet.fleet):
+        #if self.ship.check_collisions(self.alien_fleet.fleet):
+            #self._reset_level()
+        if pygame.sprite.spritecollideany(self.ship, self.alien_fleet.fleet):
+            self._reset_level()
+
+        # Bullet vs alien collisions (kept as is)
+        self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+
+        if self.alien_fleet._check_fleet_edges():
+            self._reset_level()
+
+
+        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        if collisions:
+            self.impact_sound.play()
+            self.impact_sound.fadeout(500)
+
+        if self.alien_fleet.check_destroyed_status():
+            self._reset_level()
+
+
+ 
+    def _reset_level(self)->None:
+        self.ship.arsenal.arsenal.empty()
+        self.alien_fleet.fleet.empty()
+        self.alien_fleet.create_fleet()
 
     def _update_screen(self)->None:
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         self.alien_fleet.draw()
+        self.ship.arsenal.update_arsenal()
+        self.ship.arsenal.draw()
         pygame.display.flip()
-
-    
+   
     def _check_events(self):
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                   self.running = False
-                   pygame.quit()                    
-                   sys.exit()
-                elif event.type  == pygame.KEYDOWN:
-                    self._check_keydown_events(event)
-
-                elif event.type == pygame.KEYUP:
-                    self._check_keyup_events(event) 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+                pygame.quit()                    
+                sys.exit()
+            elif event.type  == pygame.KEYDOWN:
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self._check_keyup_events(event) 
 
     def _check_keyup_events(self, event)->None:
-       if event.key == pygame.K_w:
+        if event.key == pygame.K_w:
             self.ship.moving_up = False
-       elif event.key == pygame.K_s:
+        elif event.key == pygame.K_s:
             self.ship.moving_down = False
         
     def _check_keydown_events(self, event):
         if event.key == pygame.K_w: 
             self.ship.moving_up = True
-
         elif event.key == pygame.K_s:
             self.ship.moving_down = True
-
-
         elif event.key == pygame.K_SPACE:
             if self.ship.fire():
-                #play the laser sound
                 self.laser_sound.play()
                 self.laser_sound.fadeout(250)
-
         elif event.key == pygame.K_q:
             self.running = False
             pygame.quit()
             sys.exit()
 
 if __name__ == "__main__":
-    """Test comment""" 
     ai = AlienInvasion()
     ai.run_game()
   

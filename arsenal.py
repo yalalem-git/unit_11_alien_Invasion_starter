@@ -18,15 +18,17 @@ class Arsenal:
       def update_arsenal(self) -> None:
             self.arsenal.update()
             self._remove_bullets_offscreen()
-
+      #
       def _remove_bullets_offscreen(self):
-            for bullet in self.arsenal.copy():
-                  if bullet.rect.bottom <= 0:
+           for bullet in self.arsenal.copy():
+                 if bullet.rect.bottom <= 0:
                         self.arsenal.remove(bullet)
 
-      def draw(self) -> None:
-            for bullet in self.arsenal:
-                  bullet.draw_bullet()
+
+
+      def draw(self):
+        for bullet in self.arsenal:
+            bullet.draw_bullet()
 
       def fire_bullet(self) -> None:
             if len(self.arsenal) < self.settings.bullet_amount:
@@ -35,4 +37,3 @@ class Arsenal:
                   
                   return True
             return False
-            
