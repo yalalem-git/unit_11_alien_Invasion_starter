@@ -1,4 +1,5 @@
 
+
 import pygame
 from alien import Alien
 
@@ -31,21 +32,3 @@ class Arsenal:
             bullet.draw_bullet()
 
 
-
-
-
-      #def draw(self):
-        #for bullet in self.arsenal:
-          #  bullet.draw_bullet()
-
-      def draw(self):
-          for bullet in self.arsenal.bullet:
-              bullet.draw_bullet()
-
-      def fire_bullet(self) -> None:
-            if len(self.arsenal) < self.settings.bullet_amount:
-                  new_bullet = Bullets(self.game)
-                  self.arsenal.add(new_bullet)
-                  
-                  return True
-            return False
