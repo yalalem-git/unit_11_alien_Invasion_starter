@@ -11,9 +11,11 @@ class Bullets(Sprite):
         self.screen = game.screen
         self.settings = game.settings
         
-        self.image = pygame.image.load(str(self.settings.bullet_file))
+        self.image = pygame.image.load(str(self.settings.bullet_file)).convert_alpha() 
+        self.image = pygame.transform.rotate(self.image, -90) # new
         self.image = pygame.transform.scale(self.image, 
                           (self.settings.bullet_w, self.settings.bullet_h))
+        
 
         self.rect = self.image.get_rect()
         self.rect.centery = game.ship.rect.centery

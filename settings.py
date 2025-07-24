@@ -1,6 +1,4 @@
-from pathlib import Path
 
-# Settings class (unchanged)
 from pathlib import Path
 
 class Settings:
@@ -11,6 +9,8 @@ class Settings:
         self.screen_width = 1200
         self.screen_height = 800
         self.FPS = 60
+
+        self.starting_ship_count = 3 # New
 
         self.bg_file = base_dir / 'Assets' / 'images' / 'Starbasesnow.png'
         self.ship_file = base_dir / 'Assets' / 'images' / 'ship2(no bg).png'

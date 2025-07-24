@@ -1,5 +1,6 @@
 
 
+
 import pygame
 from alien import Alien
 from typing import TYPE_CHECKING
@@ -63,7 +64,10 @@ class AlienFleet:
         return pygame.sprite.groupcollide(self.fleet, bullets, True, True)
 
     def check_destroyed_status(self):
-        return len(self.fleet) == 0
+        if not self.fleet:
+            return True
+        return False
+
 
     def draw(self):
         for alien in self.fleet:
