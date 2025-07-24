@@ -1,6 +1,7 @@
-
 import pygame
+from pygame.sprite import Sprite
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
     from arsenal import Arsenal
@@ -61,4 +62,6 @@ class Ship(pygame.sprite.Sprite):
     def fire(self) -> bool:
         return self.arsenal.fire_bullet()
     
+    def check_collisions(self, aliens):
+        return pygame.sprite.spritecollideany(self, aliens)
 

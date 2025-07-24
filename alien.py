@@ -16,27 +16,21 @@ class Alien(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.settings.alien_w, self.settings.alien_h))
         self.rect = self.image.get_rect()
 
-        #self.y = float(self.rect.y)
-
-       # self.x = float(x)
-        #self.y = float(y)
         self.rect.x = x
         self.rect.y = y
-        self.x = float(self.rect.x)     # ← new: track horizontal
-        self.y = float(self.rect.y)
+        self.x = float(self.rect.x)  # track horizontal position
+        self.y = float(self.rect.y)  # track vertical position
 
     def update(self):
-       """Move the alien vertically based on fleet direction."""
-       self.y += self.fleet.settings.vertical_direction * self.settings.fleet_speed
-       self.rect.y = int(self.y)
+        """Move alien vertically only."""
+        self.y += self.fleet.settings.vertical_direction * self.settings.fleet_speed
+        self.rect.y = int(self.y)
+        self.x -= self.fleet.settings.fleet_direction * self.settings.fleet_drop_speed
+        self.rect.x = int(self.x)
 
     def draw_alien(self) -> None:
         self.screen.blit(self.image, self.rect)
 
     def check_edges(self) -> bool:
-         #if alien touches top or bottom edges of the screen
-        if self.rect.top <= 0 or self.rect.bottom >= self.settings.screen_height:
-            return True
-        return False
-
-      
+        """Return True if alien hits top or bottom edge."""
+        return self.rect.top <= 0 or self.rect.bottom >= self.settings.screen_height

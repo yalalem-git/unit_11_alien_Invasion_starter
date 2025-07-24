@@ -26,9 +26,13 @@ class Arsenal:
 
 
 
+      #def draw(self):
+        #for bullet in self.arsenal:
+          #  bullet.draw_bullet()
+
       def draw(self):
-        for bullet in self.arsenal:
-            bullet.draw_bullet()
+          for bullet in self.arsenal.bullet:
+              bullet.draw_bullet()
 
       def fire_bullet(self) -> None:
             if len(self.arsenal) < self.settings.bullet_amount:
