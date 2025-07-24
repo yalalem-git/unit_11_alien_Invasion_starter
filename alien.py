@@ -12,7 +12,8 @@ class Alien(pygame.sprite.Sprite):
         self.settings = self.game.settings
         self.screen = self.game.screen
         
-        self.image = pygame.image.load(str(self.settings.alien_file))
+        self.image = pygame.image.load(str(self.settings.alien_file)).convert_alpha()
+        self.image = pygame.transform.rotate(self.image, -90)
         self.image = pygame.transform.scale(self.image, (self.settings.alien_w, self.settings.alien_h))
         self.rect = self.image.get_rect()
 
