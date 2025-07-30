@@ -9,7 +9,7 @@ The game ends if an alien collides with the ship or reaches the left side of the
 
 23 July 2025
 """
-
+print("hello")
 import sys
 import pygame
 from settings import Settings
