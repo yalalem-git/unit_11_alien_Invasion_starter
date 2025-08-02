@@ -53,7 +53,7 @@ class Settings:
         self.fleet_speed = 5
         self.fleet_drop_speed = 1
 
-    def set_difficulty_level(self):
+    def increase_difficulty(self):
         self.ship_side *= self.difficulty_scale
         self.bullet_speed *= self.difficulty_scale
         self.fleet_speed *= self.difficulty_scale

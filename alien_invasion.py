@@ -71,12 +71,10 @@ class AlienInvasion:
             self._check_game_status()
 
         if self.alien_fleet.check_left_edge():
-            print("Aliens reached the left edge! Game Over.")
             self.restart_game()
 
         # Check if aliens collided with ship — game over
         if self.ship.check_collisions(self.alien_fleet.fleet):
-            print("Ship hit by alien! Game Over.")
             self.restart_game()
 
         # Check bullets vs aliens collisions
@@ -87,8 +85,8 @@ class AlienInvasion:
 
         # Check if all aliens destroyed (win condition)
         if self.alien_fleet.check_destroyed_status():
-            print("All aliens destroyed! You Win!")
             self._reset_level()
+            self.settings.increase_difficulty()
 
     def _check_game_status (self)->None:
         if self.game_stats.ship_left >= 0:
@@ -104,6 +102,7 @@ class AlienInvasion:
         self.alien_fleet.create_fleet()
 
     def restart_game(self)->None:
+        self.settings.initialize_dynamic_settings()
         #setting up dynamic setting
         #reset Game stats
         #Update HUD scores
