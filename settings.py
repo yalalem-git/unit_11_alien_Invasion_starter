@@ -32,6 +32,9 @@ class Settings:
         self.vertical_direction = 1        # 1 means moving down, -1 moving up
         self.difficulty_scale = 1.1
 
+        self.score_file = base_dir / 'Assets' / 'file' / 'scores.json'
+    
+
         self.button_w = 200
         self.button_h = 40
         self.button_color = (0, 135, 50)
