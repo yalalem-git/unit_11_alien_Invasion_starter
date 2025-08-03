@@ -18,14 +18,14 @@ from arsenal import Arsenal
 from alien_fleet import AlienFleet
 from time import sleep
 from buttons import Buttons
+from hud import HUD
+
 
 class AlienInvasion:
     def __init__(self) -> None:
         pygame.init()
         self.settings = Settings()
         self.settings.initialize_dynamic_settings()
-
-        self.game_stats = GameStats(self               ) 
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height))
@@ -34,7 +34,10 @@ class AlienInvasion:
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(self.bg, 
                 (self.settings.screen_width, self.settings.screen_height))
-  
+        
+        self.game_stats = GameStats(self) 
+        self.HUD = HUD(self)
+
         self.running = True
         self.clock = pygame.time.Clock()
 
@@ -85,6 +88,8 @@ class AlienInvasion:
 
             self.game_stats.update(collisions) 
 
+            self.HUD.update_scores()
+
         # Check if all aliens destroyed (win condition)
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
@@ -116,6 +121,7 @@ class AlienInvasion:
         self.game_stats.reset_stats()
 
         #Update HUD scores
+        self.HUD.update_scores()
 
         #reset_level
         #recenter the ship
@@ -130,6 +136,7 @@ class AlienInvasion:
         self.alien_fleet.draw()
         self.ship.arsenal.update_arsenal()
         self.ship.arsenal.draw()
+        self.HUD.draw()
 
         if not self.game_active:
             self.play_button.draw()
@@ -140,6 +147,7 @@ class AlienInvasion:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+                self.game_stats.init_saved_scores()
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN and self.game_active == True:
@@ -171,6 +179,7 @@ class AlienInvasion:
                 self.laser_sound.fadeout(250)
         elif event.key == pygame.K_q:
             self.running = False
+            self.game_stats.save_scores()
             pygame.quit()
             sys.exit()
 
