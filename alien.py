@@ -5,7 +5,12 @@ if TYPE_CHECKING:
     from alien_fleet import AlienFleet
 
 class Alien(pygame.sprite.Sprite):
+    """
+    Represents a single alien enemy in the game. Each alien is part of a fleet, moves vertically and horizontally,
+    and checks for screen-edge collisions. It also knows how to draw itself
+    """
     def __init__(self, fleet: "AlienFleet", x: float, y: float) -> None:
+        """Initialize the alien with position and image attributes"""
         super().__init__()
         self.fleet = fleet
         self.game = fleet.game
@@ -23,13 +28,18 @@ class Alien(pygame.sprite.Sprite):
         self.y = float(self.rect.y)  # track vertical position
 
     def update(self):
-        """Move alien vertically only."""
+        """        
+        Update the alien's position based on fleet direction.
+        Moves vertically using `vertical_direction` and drifts horizontally
+        using `fleet_direction` and `fleet_drop_speed
+        """
         self.y += self.fleet.settings.vertical_direction * self.settings.fleet_speed
         self.rect.y = int(self.y)
         self.x -= self.fleet.settings.fleet_direction * self.settings.fleet_drop_speed
         self.rect.x = int(self.x)
 
     def draw_alien(self) -> None:
+        """Draw the alien sprite at its current position"""
         self.screen.blit(self.image, self.rect)
 
     def check_edges(self) -> bool:
