@@ -7,47 +7,48 @@ if TYPE_CHECKING:
     from arsenal import Arsenal
 
 class Ship(pygame.sprite.Sprite):
+    """
+    Represents the player's ship in the game.
+    The ship can move vertically along the screen edge, shoot bullets, and check collisions with aliens.
+    """
     def __init__(self, game: 'AlienInvasion', arsenal: 'Arsenal') -> None:
+        """Initialize the ship with its image, position, movement flags, and associated arsenal"""
         super().__init__()
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
         self.boundaries = self.screen.get_rect()
-
         self.image = pygame.image.load(str(self.settings.ship_file))
         self.image = pygame.transform.scale(self.image, (self.settings.ship_w, self.settings.ship_h))
-
         if self.settings.ship_side == "left":
             self.image = pygame.transform.rotate(self.image, -90)
         else:
             self.image = pygame.transform.rotate(self.image, 90)
-
         self.side = self.settings.ship_side
         self.rect = self.image.get_rect()
-
         if self.side == "left":
             self.rect.left = 0
         else:
             self.rect.right = self.boundaries.right
             self.image = pygame.transform.flip(self.image, True, False)
-
         self._center_ship()
-
         self.moving_up = False
         self.moving_down = False
         self.y = float(self.rect.y)
-
         self.arsenal = arsenal
 
     def _center_ship(self) -> None:
+        """Center the ship vertically on the screen"""
         self.rect.centery = self.boundaries.centery
         self.y = float(self.rect.y)
 
     def update(self) -> None:
+        """Update the ship’s position based on movement flags, and update the arsenal"""
         self._update_ship_movement()
         self.arsenal.update_arsenal()
 
     def _update_ship_movement(self) -> None:
+        """Move the ship vertically within screen boundaries based on user input"""
         speed = self.settings.ship_speed
         if self.moving_up and self.rect.top > self.boundaries.top:
             self.y -= speed
@@ -56,12 +57,15 @@ class Ship(pygame.sprite.Sprite):
         self.rect.y = int(self.y)
 
     def draw(self) -> None:
+        """Draw the ship and its bullets on the screen"""
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
 
     def fire(self) -> bool:
+        """Fire a bullet if allowed by the arsenal"""
         return self.arsenal.fire_bullet()
     
     def check_collisions(self, aliens):
+        """Check if the ship collides with any alien."""
         return pygame.sprite.spritecollideany(self, aliens)
 
