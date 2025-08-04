@@ -53,8 +53,6 @@ class AlienInvasion:
         self.alien_fleet.create_fleet()
         self.play_button = Buttons(self, 'Play')
         self.game_active = False
-
-        # Position ship on left border, centered vertically
         self.ship.rect.x = 0
         self.ship.rect.y = self.settings.screen_height // 2
 
@@ -95,8 +93,6 @@ class AlienInvasion:
             self._reset_level()
             self.settings.increase_difficulty()
 
-            #Update game stats level
-
             self.game_stats.update_level()
 
     def _check_game_status (self)->None:
@@ -113,17 +109,12 @@ class AlienInvasion:
         self.alien_fleet.create_fleet()
 
     def restart_game(self)->None:
-
         #Setting dynamic 
         self.settings.initialize_dynamic_settings()
-
         #reset Game stats
         self.game_stats.reset_stats()
-
         #Update HUD scores
         self.HUD.update_scores()
-
-        #reset_level
         #recenter the ship
         self._reset_level
         self.ship._center_ship  

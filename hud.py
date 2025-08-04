@@ -4,10 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
       from alien_invasion import AlienInvasion
-
 class HUD:
-
-
       def __init__(self, game: "AlienInvasion")->None:
             self.game = game
             self.settings = game.settings
@@ -19,9 +16,6 @@ class HUD:
             
             self.padding = 20
             self.update_scores()
-           # self.setup_life_image()
-           # self.update_level()
-
       def update_scores(self)->None:
           
           self._update_max_score()
@@ -29,7 +23,6 @@ class HUD:
           self._update_hi_score()
           self._setup_life_image()
           self.update_level()
-
 
       def _setup_life_image(self)->None:
             self.life_image = pygame.image.load(self.settings.ship_file)
@@ -41,61 +34,33 @@ class HUD:
             self.life_image = pygame.transform.rotate(self.life_image, -90)
 
             self.life_rect = self.life_image.get_rect()
-            
-
-            
+             
       def _update_score(self)-> None:
             score_str = f'SCORE: {self.game_stats.score:,.0f}'
             self.score_image = self.font.render(score_str, True,
                                                 self.settings.text_color, None)
             
             self.score_rect = self.score_image.get_rect()
-            #self.score_rect.top = self.boundaries.left - self.padding
-            ##self.score_rect.left = self.boundaries.top + 40
-            #self.score_rect.left = self.max_score_rect.bottom + self.padding
-            ##self.score_rect.top = self.padding
-             # Align right, near screen right edge with padding
 
             self.score_rect.right = self.boundaries.right - self.padding
-              # Position below the score image with padding
             self.score_rect.top = self.score_rect.bottom + self.padding
 
-
-
-
-                
       def _update_max_score(self)-> None:
             max_score_str = f'MAX_SCORE: {self.game_stats.max_score:,.0f}'
             self.max_score_image = self.font.render(max_score_str, True,
                                                 self.settings.text_color, None)
             
             self.max_score_rect = self.max_score_image.get_rect()
-
-
-           # self.max_score_rect.left = self.padding
-           #self.max_score_rect.left = self.max_score_rect.bottom - self.padding
-           # Align right same as score
             self.max_score_rect.right = self.boundaries.right - self.padding
-            # Start near top with padding
             self.max_score_rect.top = self.padding
-
-
-
-
-                  
+   
       def _update_hi_score(self)-> None:
             hi_score_str = f'HI_SCORE: {self.game_stats.hi_score:,.0f}'
             self.hi_score_image = self.font.render(hi_score_str, True,
                                                 self.settings.text_color, None)
             
             self.hi_score_rect = self.hi_score_image.get_rect()
-
-            #self.hi_score_rect.left = self.padding
-            #self.hi_score_rect.centery = self.boundaries.centery - 80
-
-            # Align right same as others
             self.hi_score_rect.right = self.boundaries.right - self.padding
-            # Vertically centered on screen:
             self.hi_score_rect.centery = self.boundaries.centery
             
       def update_level(self)-> None:
